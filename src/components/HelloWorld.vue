@@ -5,7 +5,7 @@
         <v-list-item-group
           v-model="selected"
           multiple
-          active-class="green--text"
+          active-class="blue--text"
         >
           <template v-for="(item, index) in items">
             <v-list-item :key="item.cod">
@@ -22,11 +22,11 @@
                   <v-list-item-action-text
                     v-text="item.action"
                   ></v-list-item-action-text>
-                  <v-icon v-if="!active" color="grey lighten-1"
+                  <v-icon v-if="!active" color="indigo lighten-1"
                     >star_border</v-icon
                   >
 
-                  <v-icon v-else color="yellow">star</v-icon>
+                  <v-icon v-else color="indigo dark">star</v-icon>
                 </v-list-item-action>
               </template>
             </v-list-item>
