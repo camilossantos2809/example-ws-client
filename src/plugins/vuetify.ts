@@ -2,13 +2,11 @@ import Vue from "vue";
 import Vuetify from "vuetify/lib";
 import colors from "vuetify/lib/util/colors";
 
-Vue.use(Vuetify, {
-  iconfont: "md"
-});
+Vue.use(Vuetify);
 
 export default new Vuetify({
   theme: {
-    primary: colors.indigo.darken4,
+    primary: "#041e42",
     secondary: colors.indigo.lighten1,
     accent: colors.indigo.accent1,
     error: colors.red.accent2,
