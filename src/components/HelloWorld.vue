@@ -22,13 +22,11 @@
                   <v-list-item-action-text
                     v-text="item.action"
                   ></v-list-item-action-text>
-                  <v-icon v-if="!active" color="grey lighten-1">
-                    star_border
-                  </v-icon>
+                  <v-icon v-if="!active" color="grey lighten-1"
+                    >star_border</v-icon
+                  >
 
-                  <v-icon v-else color="yellow">
-                    star
-                  </v-icon>
+                  <v-icon v-else color="yellow">star</v-icon>
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -44,6 +42,7 @@
 <script lang="ts">
 import Vue from "vue";
 import axios from "axios";
+import socketIO from "socket.io-client";
 
 export default Vue.extend({
   name: "HelloWorld",
@@ -55,8 +54,30 @@ export default Vue.extend({
     };
   },
   async mounted() {
-    const voos = await axios.get("http://localhost:3000/voos");
-    this.items.push(...voos.data);
+    const ws = new WebSocket("ws://localhost:3000");
+    ws.onopen = event => {
+      ws.send(`${location.host}`);
+      ws.send(JSON.stringify({ type: "voos" }));
+    };
+
+    interface Data {
+      cod: number;
+      desc: string;
+    }
+
+    interface EventData {
+      type: string;
+      data: Data[];
+    }
+
+    ws.onmessage = event => {
+      const data: EventData = JSON.parse(event.data);
+      if (data.type === "voos") {
+        this.items.push(...data.data);
+      }
+    };
+
+    ws.onerror = event => console.error("Erro na conexão com o WS");
   }
 });
 </script>
