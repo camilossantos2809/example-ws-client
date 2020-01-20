@@ -6,13 +6,17 @@ Vue.use(Vuetify);
 
 export default new Vuetify({
   theme: {
-    primary: "#041e42",
-    secondary: colors.indigo.lighten1,
-    accent: colors.indigo.accent1,
-    error: colors.red.accent2,
-    info: colors.blue.darken1,
-    success: colors.green.darken3,
-    warning: colors.amber.lighten2
+    themes: {
+      dark: {
+        primary: "#041e42",
+        secondary: colors.indigo.lighten1,
+        accent: colors.indigo.accent1,
+        error: colors.red.accent2,
+        info: colors.blue.darken1,
+        success: colors.green.darken3,
+        warning: colors.amber.lighten2
+      }
+    }
   },
   icons: { iconfont: "mdi" }
 });

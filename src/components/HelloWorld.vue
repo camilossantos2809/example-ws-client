@@ -41,8 +41,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
-import socketIO from "socket.io-client";
 
 export default Vue.extend({
   name: "HelloWorld",
