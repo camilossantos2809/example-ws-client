@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import ws from "../plugins/websocket";
 import DatePicker from "../components/DatePicker.vue";
 import SelectOutlined from "../components/Select.vue";
 import TextField from "../components/TextField.vue";
@@ -55,9 +56,45 @@ export default Vue.extend({
       overlay: false
     };
   },
+  mounted() {
+    ws.onopen = event => ws.send(JSON.stringify({ type: "status" }));
+
+    ws.onmessage = event => {
+      this.initEmbarque(event);
+      this.validaStatus(event);
+    };
+
+    ws.onerror = event => console.error(event);
+
+    // ws.send(JSON.stringify({ type: "status" }));
+  },
   methods: {
     buscaVoo() {
       this.overlay = true;
+      ws.send(JSON.stringify({ type: "init_embarque" }));
+    },
+    initEmbarque(event: Event) {
+      console.log(event);
+      const data = JSON.parse(event.data);
+      if (data.type === "init_embarque") {
+        this.$router.push("/embarque");
+      }
+    },
+    validaStatus(event: Event) {
+      console.log(event);
+      const data = JSON.parse(event.data);
+      if (data.type === "status") {
+        const status = data.data;
+        if (status === "processing") {
+          this.overlay = true;
+        } else if (
+          status === "initiated" ||
+          status === "boarding" ||
+          status === "not_boarding"
+        ) {
+          this.$router.push("/embarque");
+        }
+      }
     }
   }
 });
