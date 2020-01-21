@@ -74,14 +74,12 @@ export default Vue.extend({
       ws.send(JSON.stringify({ type: "init_embarque" }));
     },
     initEmbarque(event: Event) {
-      console.log(event);
       const data = JSON.parse(event.data);
       if (data.type === "init_embarque") {
         this.$router.push("/embarque");
       }
     },
     validaStatus(event: Event) {
-      console.log(event);
       const data = JSON.parse(event.data);
       if (data.type === "status") {
         const status = data.data;

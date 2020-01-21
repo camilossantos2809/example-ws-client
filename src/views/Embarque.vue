@@ -14,7 +14,20 @@
     <div v-if="status">
       <v-progress-linear indeterminate color="#041e42"></v-progress-linear>
     </div>
-    <button-outlined class="mt-12" :title="'Cancelar'" :icon="'clear'" />
+    <dialog-confirm
+      title="Aviso!"
+      text="Você tem certeza que deseja reiniciar o
+    processo?"
+      :show="dialog"
+      :onConfirm="onConfirm"
+      :onCancel="onCancel"
+    />
+    <button-outlined
+      class="mt-12"
+      :title="'Cancelar'"
+      :icon="'clear'"
+      :handleClick="showDialog"
+    />
   </div>
 </template>
 
@@ -22,12 +35,14 @@
 import Vue from "vue";
 import ws from "../plugins/websocket";
 import ButtonOutlined from "../components/ButtonOutlined.vue";
+import DialogConfirm from "../components/DialogConfirm.vue";
 
 export default Vue.extend({
-  components: { ButtonOutlined },
+  components: { ButtonOutlined, DialogConfirm },
   data() {
     return {
-      status: false
+      status: false,
+      dialog: false
     };
   },
   computed: {
@@ -46,6 +61,17 @@ export default Vue.extend({
         ws.send(JSON.stringify({ type: "start_embarque" }));
       }
       this.status = !this.status;
+    },
+    showDialog() {
+      this.dialog = true;
+    },
+    onCancel() {
+      this.dialog = false;
+    },
+    onConfirm() {
+      this.dialog = false;
+      ws.send(JSON.stringify({ type: "cancel" }));
+      this.$router.push("/");
     }
   },
   mounted() {
@@ -61,6 +87,8 @@ export default Vue.extend({
         } else {
           this.status = false;
         }
+      } else if (data.type === "cancel") {
+        this.$router.push("/");
       }
     };
   }
